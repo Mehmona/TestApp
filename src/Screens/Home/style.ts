@@ -26,6 +26,18 @@ const styles = StyleSheet.create({
     padding: 10 * heightRef,
     paddingTop: 50 * heightRef,
   },
+  mainText: {textDecorationLine: 'underline'},
+  sentenceWords: {
+    textDecorationLine: 'underline',
+    textDecorationStyle: 'dotted',
+    fontWeight: 'bold',
+  },
+  bottomViewContainer: {width: '100%', alignItems: 'center', flex: 1},
+  textView: {
+    flexDirection: 'row',
+    paddingVertical: 20,
+    alignItems: 'center',
+  },
   wrapView: {
     flexWrap: 'wrap',
     flexDirection: 'row',

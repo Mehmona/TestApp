@@ -1,7 +1,5 @@
 # TestApplication
 
-Foobar is a Python library for dealing with word pluralization.
-
 ## Installation
 
 Installing all the dependencies
@@ -9,6 +7,10 @@ Installing all the dependencies
 ```bash
 yarn install
 ```
+
+### iOS
+
+if got any error, Try running with XCode
 
 Script to install pods and run iOS App
 
@@ -21,6 +23,8 @@ or if pods are already installed
 ```bash
 yarn ios
 ```
+
+### Android
 
 To install App in Android
 

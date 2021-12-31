@@ -8,27 +8,16 @@
 
 import {NavigationContainer} from '@react-navigation/native';
 import React from 'react';
-import {LogBox, StatusBar, Platform, UIManager} from 'react-native';
-import {Provider} from 'react-redux';
-import {PersistGate} from 'redux-persist/integration/react';
+import {LogBox, StatusBar} from 'react-native';
 import HomeStack from 'src/Navigations/HomeStack';
-import {persistor, store} from 'src/Redux/ConfigureStore';
 LogBox.ignoreAllLogs();
-if (Platform.OS === 'android') {
-  if (UIManager.setLayoutAnimationEnabledExperimental) {
-    UIManager.setLayoutAnimationEnabledExperimental(true);
-  }
-}
+
 const App = () => {
   return (
-    <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
-        <NavigationContainer>
-          <StatusBar translucent backgroundColor="transparent" />
-          <HomeStack />
-        </NavigationContainer>
-      </PersistGate>
-    </Provider>
+    <NavigationContainer>
+      <StatusBar translucent backgroundColor="transparent" />
+      <HomeStack />
+    </NavigationContainer>
   );
 };
 

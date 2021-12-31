@@ -1,5 +1,4 @@
 import {BottomSheetModal, BottomSheetModalProvider} from '@gorhom/bottom-sheet';
-import {useNavigation} from '@react-navigation/native';
 import React, {useMemo, useRef, useState} from 'react';
 import Animated, {Layout} from 'react-native-reanimated';
 import Backdrop from 'src/Components/BottomSheet/Backdrop';
@@ -16,10 +15,9 @@ const Home = () => {
     label: '',
     isTrue: false,
   });
+  const [showAnswer, setShowAnswer] = useState(false);
   const bottomSheetRef = useRef<BottomSheetModal>(null);
   const snapPoints = useMemo(() => ['20%'], []);
-
-  const textContainerRef = useRef();
 
   return (
     <BottomSheetModalProvider>
@@ -31,30 +29,16 @@ const Home = () => {
             <Text fontSize={12}>Fill in the missing word</Text>
             <Text fontSize={20} paddingVertical={30}>
               The{' '}
-              <Text
-                fontSize={22}
-                style={{textDecorationLine: 'underline'}}
-                bold>
+              <Text fontSize={22} style={styles.mainText} bold>
                 house
               </Text>{' '}
               is small
             </Text>
-            <Animated.View
-              style={{
-                flexDirection: 'row',
-                paddingVertical: 20,
-                alignItems: 'center',
-              }}
-              layout={Layout.springify()}>
+            <Animated.View style={styles.textView} layout={Layout.springify()}>
               {React.Children.toArray(
                 Sentence.map(s =>
                   !s.hide ? (
-                    <Text
-                      bold
-                      style={{
-                        textDecorationLine: 'underline',
-                        textDecorationStyle: 'dotted',
-                      }}>
+                    <Text style={styles.sentenceWords}>
                       {'  '}
                       {s.text}
                       {'  '}
@@ -64,20 +48,29 @@ const Home = () => {
                       key={selectedAnswer.label}
                       layout={Layout.springify()}>
                       <Button
-                        onPress={() => {
-                          // LayoutAnimate();
-                          setSelectedAnswer({label: '', isTrue: false});
-                        }}
+                        onPress={() =>
+                          setSelectedAnswer({label: '', isTrue: false})
+                        }
                         borderRadius={15}
-                        backgroundColor="white"
-                        titleColor={globalStyles.Theme.SecondaryColor}
+                        backgroundColor={
+                          showAnswer
+                            ? selectedAnswer.isTrue
+                              ? globalStyles.Theme.success
+                              : globalStyles.Theme.fail
+                            : 'white'
+                        }
+                        titleColor={
+                          showAnswer
+                            ? 'white'
+                            : globalStyles.Theme.SecondaryColor
+                        }
                         shadow
                         width={80}
                         title={selectedAnswer.label}
                       />
                     </Animated.View>
                   ) : (
-                    <Text btnRef={textContainerRef}> ___________ </Text>
+                    <Text> ___________ </Text>
                   ),
                 ),
               )}
@@ -87,10 +80,7 @@ const Home = () => {
                 selectedAnswer.label !== s.label ? (
                   <Animated.View layout={Layout.springify()} key={s.label}>
                     <Button
-                      onPress={() => {
-                        // LayoutAnimate();
-                        setSelectedAnswer(s);
-                      }}
+                      onPress={() => setSelectedAnswer(s)}
                       borderRadius={15}
                       backgroundColor="white"
                       titleColor={globalStyles.Theme.SecondaryColor}
@@ -100,7 +90,7 @@ const Home = () => {
                     />
                   </Animated.View>
                 ) : (
-                  <Animated.View layout={Layout.easing()} key="disabled">
+                  <Animated.View layout={Layout.springify()} key="disabled">
                     <Button disabled borderRadius={15} width={80} />
                   </Animated.View>
                 ),
@@ -108,7 +98,10 @@ const Home = () => {
             </Animated.View>
             <View style={styles.bottomButton}>
               <Button
-                onPress={() => bottomSheetRef.current?.present()}
+                onPress={() => {
+                  setShowAnswer(true);
+                  bottomSheetRef.current?.present();
+                }}
                 disabled={selectedAnswer.label === ''}
                 borderRadius={15}
                 shadow
@@ -131,7 +124,7 @@ const Home = () => {
               ? globalStyles.Theme.success
               : globalStyles.Theme.fail,
           }}>
-          <View style={{width: '100%', alignItems: 'center', flex: 1}}>
+          <View style={styles.bottomViewContainer}>
             <View style={styles.bottomSheetView}>
               <Text bold>
                 {' '}
@@ -146,7 +139,10 @@ const Home = () => {
               borderRadius={15}
               width="80%"
               shadow
-              onPress={() => bottomSheetRef.current?.dismiss()}
+              onPress={() => {
+                setShowAnswer(false);
+                bottomSheetRef.current?.dismiss();
+              }}
               title="CONTINUE"
               titleColor={
                 selectedAnswer.isTrue
